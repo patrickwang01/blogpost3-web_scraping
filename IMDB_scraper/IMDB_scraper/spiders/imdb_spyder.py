@@ -39,12 +39,18 @@ class ImdbSpider(scrapy.Spider):
     
     def parse_actor_page(self, response):
         
+        # extract actor name 
         actor_name = response.css("span.itemprop::text").get() 
  
-        for row in response.css("div.filmo-row"):
-            
-            movie_or_TV_name = response.css("b a::text")
+        rows = response.css("div.filmo-row")
 
+        # loop through all the movies/tv shows
+        for row in rows:
+            
+            # obtain movie/tv show name
+            movie_or_TV_name = row.css("b a::text").get()
+
+            # create dictionary with actor name and movie/tv show name
             yield {
                 "actor": actor_name,
                 "movie_or_TV_name": movie_or_TV_name
