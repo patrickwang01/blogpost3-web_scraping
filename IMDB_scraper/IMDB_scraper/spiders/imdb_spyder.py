@@ -2,8 +2,6 @@ import scrapy
 from scrapy.spiders import Spider
 from scrapy.http import Request
 
-# C:/Users/wangp/anaconda3/Scripts/activate
-
 class ImdbSpider(scrapy.Spider):
     name = 'imdb_spider'
 
@@ -53,7 +51,7 @@ class ImdbSpider(scrapy.Spider):
         Yields a dictionary per movie/tv show with 2 key-value pairs of 
         {"actor": actor name, "movie_or_TV_name": movie_or_TV_name}
         '''
-        
+
         # extract actor name 
         actor_name = response.css("span.itemprop::text").get() 
  
@@ -70,3 +68,4 @@ class ImdbSpider(scrapy.Spider):
                 "actor": actor_name,
                 "movie_or_TV_name": movie_or_TV_name
             }
+
