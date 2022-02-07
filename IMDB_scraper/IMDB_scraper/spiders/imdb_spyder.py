@@ -11,7 +11,11 @@ class ImdbSpider(scrapy.Spider):
 
     
     def parse(self, response):
-        
+        '''
+        Function that parses the main site of the movie/tv-show and extracts the href of the 'Cast and Crews' tab. 
+        Yields the url for the 'Cast and Crews' site and calls parse_full_credits afterwards
+        '''
+
         # get href portion of 'cast and crew' item
         cast = response.css("li.ipc-inline-list__item a")[2].attrib["href"]
 
@@ -22,7 +26,12 @@ class ImdbSpider(scrapy.Spider):
 
     
     def parse_full_credits(self, response):
-        
+        '''
+        Function that parse the 'Cast and Crews' page and extracts the href suffix of each actor. 
+        Adds href suffix of each actor onto main IMDB url 
+        and yields full url for each individual actor and calls parse_actor_page afterwards
+        '''
+
         # get href portion for each actor thumbnail
         actor_names = [a.attrib["href"] for a in response.css("td.primary_photo a")]
 
@@ -38,6 +47,12 @@ class ImdbSpider(scrapy.Spider):
         
     
     def parse_actor_page(self, response):
+        '''
+        Function that parses an individual actor's page. Extracts the name of the actor and 
+        then all of the names of each movie/tv show that they worked on. 
+        Yields a dictionary per movie/tv show with 2 key-value pairs of 
+        {"actor": actor name, "movie_or_TV_name": movie_or_TV_name}
+        '''
         
         # extract actor name 
         actor_name = response.css("span.itemprop::text").get() 
